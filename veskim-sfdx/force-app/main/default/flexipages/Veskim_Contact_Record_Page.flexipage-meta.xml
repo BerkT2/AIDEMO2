@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Veskim Contact Record Page with activity logger and standard detail panel.</description>
+    <flexiPageRegions>
+        <name>main</name>
+        <type>Region</type>
+        <itemInstances>
+            <componentName>force_detail:detailPanel</componentName>
+        </itemInstances>
+        <itemInstances>
+            <componentName>c:VeskimActivityLogger</componentName>
+        </itemInstances>
+        <itemInstances>
+            <componentName>force_relatedlist:relatedListContainer</componentName>
+        </itemInstances>
+    </flexiPageRegions>
+    <masterLabel>Veskim Contact Record Page</masterLabel>
+    <pageTemplate>RecordPage2Col_LeftSmallRightLarge</pageTemplate>
+    <sobjectType>Contact</sobjectType>
+    <type>RecordPage</type>
+</FlexiPage>

@@ -1,0 +1,101 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <!-- Veskim Account Summary Component - Displays key account info, status and Logo ERP data -->
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="account" type="Object"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <force:recordData aura:id="accountRecord"
+        recordId="{!v.recordId}"
+        targetFields="{!v.account}"
+        fields="Id,Name,External_ID__c,Finance_Approval_Status__c,Customer_Status__c,Approved_Limit__c,Requested_Limit__c,Balance_Risk_Total__c,Limit_Status__c,Customer_Segmentation__c,Tax_Number__c,Payment_Method__c,OwnerId"
+        recordUpdated="{!c.recordLoaded}"
+        mode="VIEW"/>
+
+    <div class="veskim-account-summary slds-p-around_medium">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner alternativeText="Loading" size="medium"/>
+        </aura:if>
+        <aura:if isTrue="{!!v.isLoading}">
+            <!-- Status Banner -->
+            <aura:if isTrue="{!v.account.Finance_Approval_Status__c == 'Pending'}">
+                <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-bottom_small" role="alert">
+                    <span class="slds-assistive-text">warning</span>
+                    <lightning:icon iconName="utility:warning" size="x-small" alternativeText="Warning" class="slds-m-right_x-small"/>
+                    <h2>This account is <strong>Pending Finance Approval</strong>. It has not yet been synced to Logo ERP.</h2>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.account.Customer_Status__c == 'Blacklisted'}">
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_small" role="alert">
+                    <span class="slds-assistive-text">error</span>
+                    <lightning:icon iconName="utility:error" size="x-small" alternativeText="Error" class="slds-m-right_x-small"/>
+                    <h2>This account is <strong>Blacklisted</strong> (Limit = 0 from Logo ERP).</h2>
+                </div>
+            </aura:if>
+
+            <!-- Key Metrics Grid -->
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="slds-box veskim-metric-box">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Finance Approval</p>
+                        <lightning:badge label="{!v.account.Finance_Approval_Status__c}"
+                            class="{! v.account.Finance_Approval_Status__c == 'Approved' ? 'slds-theme_success' :
+                                   (v.account.Finance_Approval_Status__c == 'Rejected' ? 'slds-theme_error' : 'slds-theme_warning')}"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="slds-box veskim-metric-box">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Customer Status</p>
+                        <lightning:badge label="{!v.account.Customer_Status__c}"
+                            class="{! v.account.Customer_Status__c == 'Active' ? 'slds-theme_success' : 'slds-theme_shade'}"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="slds-box veskim-metric-box">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Segmentation</p>
+                        <p class="slds-text-body_regular">{!v.account.Customer_Segmentation__c}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="slds-box veskim-metric-box">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Requested Limit</p>
+                        <lightning:formattedNumber value="{!v.account.Requested_Limit__c}" style="currency" currencyCode="TRY"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="slds-box veskim-metric-box">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Approved Limit</p>
+                        <lightning:formattedNumber value="{!v.account.Approved_Limit__c}" style="currency" currencyCode="TRY"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_small">
+                    <div class="slds-box veskim-metric-box">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Balance &amp; Risk Total</p>
+                        <lightning:formattedNumber value="{!v.account.Balance_Risk_Total__c}" style="currency" currencyCode="TRY"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logo ERP Integration Info -->
+            <div class="slds-box slds-m-top_small veskim-erp-info">
+                <div class="slds-grid slds-gutters slds-grid_vertical-align-center">
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning:icon iconName="utility:connected_apps" size="medium"/>
+                    </div>
+                    <div class="slds-col slds-size_11-of-12">
+                        <p class="slds-text-body_small slds-text-color_weak">Logo ERP Customer Code</p>
+                        <p class="slds-text-heading_small">
+                            <aura:if isTrue="{!v.account.External_ID__c}">
+                                {!v.account.External_ID__c}
+                                <aura:set attribute="else">
+                                    <span class="slds-text-color_weak slds-text-body_small">Not yet synced to Logo ERP</span>
+                                </aura:set>
+                            </aura:if>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

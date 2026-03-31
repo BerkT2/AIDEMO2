@@ -1,0 +1,5 @@
+# Standard .forceignore file
+.sfdx
+.localdevserver
+**/*.dup
+package.xml

@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <language>tr</language>
+
+    <!-- ============================================================ -->
+    <!-- CUSTOM OBJECT: Address__c -->
+    <!-- ============================================================ -->
+    <customObjects>
+        <name>Address__c</name>
+        <label>Adres</label>
+        <labelPlural>Adresler</labelPlural>
+        <gender>n</gender>
+        <nameFieldLabel>Adres Adı</nameFieldLabel>
+        <fields>
+            <name>Account__c</name>
+            <label>Cari Hesap</label>
+            <relationshipLabel>Adresler</relationshipLabel>
+        </fields>
+        <fields>
+            <name>Address_Definition__c</name>
+            <label>Adres Tanımı</label>
+            <help>Adresin kısa tanımlayıcısı (ör. Gebze Depo, Merkez Ofis)</help>
+        </fields>
+        <fields>
+            <name>Address_Type__c</name>
+            <label>Adres Tipi</label>
+            <picklistValues>
+                <masterLabel>Shipping Address</masterLabel>
+                <translation>Sevkiyat Adresi</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Billing Address</masterLabel>
+                <translation>Fatura Adresi</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Country__c</name>
+            <label>Ülke</label>
+            <picklistValues>
+                <masterLabel>Turkey</masterLabel>
+                <translation>Türkiye</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>City__c</name>
+            <label>İl (Şehir)</label>
+        </fields>
+        <fields>
+            <name>District__c</name>
+            <label>İlçe</label>
+        </fields>
+        <fields>
+            <name>Neighborhood__c</name>
+            <label>Mahalle / Semt</label>
+        </fields>
+        <fields>
+            <name>Address_Line_1__c</name>
+            <label>Adres Satırı 1</label>
+        </fields>
+        <fields>
+            <name>Address_Line_2__c</name>
+            <label>Adres Satırı 2</label>
+        </fields>
+        <fields>
+            <name>Postal_Code__c</name>
+            <label>Posta Kodu</label>
+        </fields>
+        <fields>
+            <name>Contact_Name__c</name>
+            <label>İlgili Kişi Adı</label>
+        </fields>
+        <fields>
+            <name>Address_Phone__c</name>
+            <label>Adres Telefonu</label>
+        </fields>
+        <fields>
+            <name>Address_Email__c</name>
+            <label>Adres E-postası</label>
+        </fields>
+        <fields>
+            <name>Is_Active__c</name>
+            <label>Aktif mi?</label>
+        </fields>
+        <fields>
+            <name>External_ID__c</name>
+            <label>Harici ID (Logo Adres Kodu)</label>
+        </fields>
+        <layouts>
+            <layout>Address__c-Address Layout</layout>
+            <sections>
+                <section>Address Information</section>
+                <label>Adres Bilgileri</label>
+            </sections>
+            <sections>
+                <section>Address Details</section>
+                <label>Adres Detayları</label>
+            </sections>
+        </layouts>
+    </customObjects>
+
+    <!-- ============================================================ -->
+    <!-- STANDARD OBJECT: Lead - Custom Fields -->
+    <!-- ============================================================ -->
+    <customObjects>
+        <name>Lead</name>
+        <fields>
+            <name>Related_Department__c</name>
+            <label>İlgili Departman</label>
+            <picklistValues>
+                <masterLabel>Purchasing</masterLabel>
+                <translation>Satın Alma</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>IT</masterLabel>
+                <translation>Bilgi Teknolojileri</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Logistics</masterLabel>
+                <translation>Lojistik</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Finance</masterLabel>
+                <translation>Finans</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Management</masterLabel>
+                <translation>Yönetim</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Production</masterLabel>
+                <translation>Üretim</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Other</masterLabel>
+                <translation>Diğer</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Segmentation__c</name>
+            <label>Segmentasyon</label>
+            <picklistValues>
+                <masterLabel>Enterprise</masterLabel>
+                <translation>Kurumsal</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>SME</masterLabel>
+                <translation>KOBİ</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Dealer</masterLabel>
+                <translation>Bayi</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Veskim_Department__c</name>
+            <label>Veskim Departmanı</label>
+            <picklistValues>
+                <masterLabel>Main Chemical</masterLabel>
+                <translation>Ana Kimyasal</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Auxiliary Chemical</masterLabel>
+                <translation>Yardımcı Kimyasal</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>City_District__c</name>
+            <label>İl / İlçe</label>
+        </fields>
+        <fields>
+            <name>Interest_Area__c</name>
+            <label>İlgi / Talep Alanı</label>
+        </fields>
+        <fields>
+            <name>Product_Group_Interest__c</name>
+            <label>Ürün Grubu İlgisi</label>
+            <picklistValues>
+                <masterLabel>Main Chemical</masterLabel>
+                <translation>Ana Kimyasal</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Auxiliary Chemical</masterLabel>
+                <translation>Yardımcı Kimyasal</translation>
+            </picklistValues>
+        </fields>
+        <layouts>
+            <layout>Lead-Veskim Lead Layout</layout>
+            <sections>
+                <section>Lead Information</section>
+                <label>Potansiyel Müşteri Bilgileri</label>
+            </sections>
+            <sections>
+                <section>Veskim Details</section>
+                <label>Veskim Detayları</label>
+            </sections>
+            <sections>
+                <section>Additional Information</section>
+                <label>Ek Bilgiler</label>
+            </sections>
+        </layouts>
+    </customObjects>
+
+    <!-- ============================================================ -->
+    <!-- STANDARD OBJECT: Account - Custom Fields -->
+    <!-- ============================================================ -->
+    <customObjects>
+        <name>Account</name>
+        <fields>
+            <name>External_ID__c</name>
+            <label>Harici ID (Logo Cari Kodu)</label>
+        </fields>
+        <fields>
+            <name>Tax_Number__c</name>
+            <label>Vergi No / TCKN</label>
+        </fields>
+        <fields>
+            <name>Customer_Segmentation__c</name>
+            <label>Müşteri Segmentasyonu</label>
+            <picklistValues>
+                <masterLabel>Enterprise</masterLabel>
+                <translation>Kurumsal</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>SME</masterLabel>
+                <translation>KOBİ</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Dealer</masterLabel>
+                <translation>Bayi</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>End User</masterLabel>
+                <translation>Son Kullanıcı</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Finance_Approval_Status__c</name>
+            <label>Finans Onay Durumu</label>
+            <picklistValues>
+                <masterLabel>Pending</masterLabel>
+                <translation>Onay Bekliyor</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Approved</masterLabel>
+                <translation>Onaylandı</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Rejected</masterLabel>
+                <translation>Reddedildi</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Customer_Status__c</name>
+            <label>Müşteri Durumu</label>
+            <picklistValues>
+                <masterLabel>Active</masterLabel>
+                <translation>Aktif</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Passive</masterLabel>
+                <translation>Pasif</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Pool</masterLabel>
+                <translation>Havuz</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Blacklisted</masterLabel>
+                <translation>Kara Liste</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Pending Approval</masterLabel>
+                <translation>Onay Bekliyor</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Limit_Status__c</name>
+            <label>Limit Durumu</label>
+        </fields>
+        <fields>
+            <name>Payment_Method__c</name>
+            <label>Ödeme Şekli</label>
+            <picklistValues>
+                <masterLabel>Cash</masterLabel>
+                <translation>Peşin</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Own Check</masterLabel>
+                <translation>Kendi Çeki</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Customer Check</masterLabel>
+                <translation>Müşteri Çeki</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Bank Transfer</masterLabel>
+                <translation>Banka Havalesi / EFT</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Credit Card</masterLabel>
+                <translation>Kredi Kartı</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Sub_Sector__c</name>
+            <label>Alt Kırılım</label>
+        </fields>
+        <fields>
+            <name>Bank_Info_IBAN__c</name>
+            <label>Banka Bilgisi (IBAN)</label>
+        </fields>
+        <fields>
+            <name>Balance_Risk_Total__c</name>
+            <label>Bakiye ve Risk Toplamı</label>
+        </fields>
+        <fields>
+            <name>Tax_Certificate_Image__c</name>
+            <label>Vergi Levhası Görseli</label>
+        </fields>
+        <fields>
+            <name>Requested_Limit__c</name>
+            <label>Talep Edilen Limit</label>
+        </fields>
+        <fields>
+            <name>Approved_Limit__c</name>
+            <label>Onaylanan Limit</label>
+        </fields>
+        <fields>
+            <name>Inactivity_Reason__c</name>
+            <label>Hareketsizlik Nedeni</label>
+        </fields>
+        <fields>
+            <name>Ownership_Reason__c</name>
+            <label>Sahiplenme Sebebi</label>
+        </fields>
+        <fields>
+            <name>Rejection_Reason__c</name>
+            <label>Red Gerekçesi</label>
+        </fields>
+        <recordTypes>
+            <name>Trader</name>
+            <label>Tüccar</label>
+        </recordTypes>
+        <recordTypes>
+            <name>End_User</name>
+            <label>Son Kullanıcı</label>
+        </recordTypes>
+        <layouts>
+            <layout>Account-Veskim Account Layout</layout>
+            <sections>
+                <section>Account Information</section>
+                <label>Cari Bilgileri</label>
+            </sections>
+            <sections>
+                <section>Financial Information</section>
+                <label>Finansal Bilgiler</label>
+            </sections>
+            <sections>
+                <section>Status and Notes</section>
+                <label>Durum ve Notlar</label>
+            </sections>
+        </layouts>
+    </customObjects>
+
+    <!-- ============================================================ -->
+    <!-- STANDARD OBJECT: Opportunity - Custom Fields -->
+    <!-- ============================================================ -->
+    <customObjects>
+        <name>Opportunity</name>
+        <fields>
+            <name>Opportunity_Source__c</name>
+            <label>Fırsat Kaynağı</label>
+            <picklistValues>
+                <masterLabel>Web</masterLabel>
+                <translation>Web</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Fair / Expo</masterLabel>
+                <translation>Fuar / Sergi</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Referral</masterLabel>
+                <translation>Referans</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Phone</masterLabel>
+                <translation>Telefon</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Email</masterLabel>
+                <translation>E-posta</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Direct Visit</masterLabel>
+                <translation>Ziyaret</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Related_Product_Group__c</name>
+            <label>İlgili Ürün Grubu</label>
+            <picklistValues>
+                <masterLabel>Main Chemical</masterLabel>
+                <translation>Ana Kimyasal</translation>
+            </picklistValues>
+            <picklistValues>
+                <masterLabel>Auxiliary Chemical</masterLabel>
+                <translation>Yardımcı Kimyasal</translation>
+            </picklistValues>
+        </fields>
+        <fields>
+            <name>Competitor_Info__c</name>
+            <label>Rakip Bilgileri</label>
+        </fields>
+        <layouts>
+            <layout>Opportunity-Veskim Opportunity Layout</layout>
+            <sections>
+                <section>Opportunity Information</section>
+                <label>Fırsat Bilgileri</label>
+            </sections>
+            <sections>
+                <section>Additional Information</section>
+                <label>Ek Bilgiler</label>
+            </sections>
+        </layouts>
+    </customObjects>
+
+    <!-- ============================================================ -->
+    <!-- STANDARD OBJECT: Contact - Layout sections -->
+    <!-- ============================================================ -->
+    <customObjects>
+        <name>Contact</name>
+        <layouts>
+            <layout>Contact-Veskim Contact Layout</layout>
+            <sections>
+                <section>Contact Information</section>
+                <label>İletişim Bilgileri</label>
+            </sections>
+            <sections>
+                <section>Additional Information</section>
+                <label>Ek Bilgiler</label>
+            </sections>
+        </layouts>
+    </customObjects>
+
+    <!-- ============================================================ -->
+    <!-- AURA COMPONENT LABELS -->
+    <!-- ============================================================ -->
+    <customApplications>
+        <name>Veskim</name>
+        <label>Veskim</label>
+    </customApplications>
+
+    <!-- ============================================================ -->
+    <!-- TABS -->
+    <!-- ============================================================ -->
+    <customTabs>
+        <name>Address__c</name>
+        <label>Adresler</label>
+    </customTabs>
+
+    <!-- ============================================================ -->
+    <!-- VALIDATION RULE MESSAGES -->
+    <!-- ============================================================ -->
+    <validationRules>
+        <name>Account.Rejection_Reason_Required</name>
+        <errorMessage>Finans Onay Durumunu Reddedildi olarak ayarlamadan önce lütfen Red Gerekçesini giriniz.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <name>Account.Inactivity_Reason_Required</name>
+        <errorMessage>Müşteri Durumunu Pasif veya Havuz olarak ayarlarken lütfen Hareketsizlik Nedenini giriniz.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <name>Account.Ownership_Reason_Required</name>
+        <errorMessage>Pasif veya Havuzdaki bir cariyi sahiplenirken lütfen Sahiplenme Sebebini giriniz.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <name>Account.Tax_Number_Format</name>
+        <errorMessage>Vergi Numarası tam olarak 10 hane (kurumsal) veya 11 hane (bireysel TCKN) olmalıdır.</errorMessage>
+    </validationRules>
+</Translations>

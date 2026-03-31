@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rejection_Reason_Required</fullName>
+    <active>true</active>
+    <description>When Finance Approval Status is set to Rejected, the Rejection Reason field must be filled in.</description>
+    <errorConditionFormula>AND(
+  ISPICKVAL(Finance_Approval_Status__c, 'Rejected'),
+  ISBLANK(Rejection_Reason__c)
+)</errorConditionFormula>
+    <errorMessage>Please enter a Rejection Reason before setting Finance Approval Status to Rejected.</errorMessage>
+</ValidationRule>

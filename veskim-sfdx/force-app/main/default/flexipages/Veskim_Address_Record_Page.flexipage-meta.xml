@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Veskim Address Record Page for customer shipping and billing addresses.</description>
+    <flexiPageRegions>
+        <name>main</name>
+        <type>Region</type>
+        <itemInstances>
+            <componentName>force_detail:detailPanel</componentName>
+        </itemInstances>
+    </flexiPageRegions>
+    <masterLabel>Veskim Address Record Page</masterLabel>
+    <pageTemplate>RecordPage2Col_LeftSmallRightLarge</pageTemplate>
+    <sobjectType>Address__c</sobjectType>
+    <type>RecordPage</type>
+</FlexiPage>

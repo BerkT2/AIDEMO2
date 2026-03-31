@@ -1,0 +1,8 @@
+.THIS .veskim-address-item {
+    transition: background-color 0.15s ease;
+}
+
+.THIS .veskim-address-item:hover {
+    background-color: #f8f8f8;
+    cursor: pointer;
+}

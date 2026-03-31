@@ -19,5 +19,4 @@
     <tabs>standard-report</tabs>
     <tabs>standard-dashboard</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar>Veskim_Utility_Bar</utilityBar>
 </CustomApplication>

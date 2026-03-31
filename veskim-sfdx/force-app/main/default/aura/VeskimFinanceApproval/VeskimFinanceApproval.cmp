@@ -1,0 +1,133 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <!-- Veskim Finance Approval - Finance officer approval workflow for new accounts -->
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="account" type="Object"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="showApproveModal" type="Boolean" default="false"/>
+    <aura:attribute name="showRejectModal" type="Boolean" default="false"/>
+    <aura:attribute name="approvedLimit" type="Decimal"/>
+    <aura:attribute name="rejectionReason" type="String" default=""/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <force:recordData aura:id="accountRecord"
+        recordId="{!v.recordId}"
+        targetFields="{!v.account}"
+        fields="Id,Name,Finance_Approval_Status__c,Customer_Status__c,Requested_Limit__c,Approved_Limit__c,Rejection_Reason__c,Tax_Number__c,Tax_Certificate_Image__c"
+        recordUpdated="{!c.recordLoaded}"
+        mode="VIEW"/>
+
+    <div class="veskim-finance-approval slds-p-around_medium">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner alternativeText="Loading" size="medium"/>
+        </aura:if>
+        <aura:if isTrue="{!!v.isLoading}">
+            <aura:if isTrue="{! v.account.Finance_Approval_Status__c == 'Pending'}">
+                <lightning:card title="Finance Approval Required" iconName="standard:approval">
+                    <div class="slds-p-around_medium">
+                        <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-bottom_medium">
+                            <lightning:icon iconName="utility:warning" size="x-small" class="slds-m-right_x-small"/>
+                            <h2>This account is awaiting Finance Approval before being synced to Logo ERP.</h2>
+                        </div>
+
+                        <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-box">
+                                    <p class="slds-text-body_small slds-text-color_weak">Requested Limit</p>
+                                    <p class="slds-text-heading_medium">
+                                        <lightning:formattedNumber value="{!v.account.Requested_Limit__c}" style="currency" currencyCode="TRY"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-box">
+                                    <p class="slds-text-body_small slds-text-color_weak">Tax Number</p>
+                                    <p class="slds-text-heading_medium">{!v.account.Tax_Number__c}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning:button label="Approve" iconName="utility:check"
+                                    variant="success" onclick="{!c.openApproveModal}"
+                                    class="slds-m-right_small"/>
+                                <lightning:button label="Reject" iconName="utility:close"
+                                    variant="destructive" onclick="{!c.openRejectModal}"/>
+                            </div>
+                        </div>
+                    </div>
+                </lightning:card>
+            </aura:if>
+
+            <aura:if isTrue="{! v.account.Finance_Approval_Status__c == 'Approved'}">
+                <lightning:card title="Finance Approval" iconName="standard:approval">
+                    <div class="slds-p-around_medium">
+                        <div class="slds-notify slds-notify_alert slds-alert_success">
+                            <lightning:icon iconName="utility:success" size="x-small" class="slds-m-right_x-small"/>
+                            <h2>Approved — Synced to Logo ERP. Approved Limit:
+                                <strong><lightning:formattedNumber value="{!v.account.Approved_Limit__c}" style="currency" currencyCode="TRY"/></strong>
+                            </h2>
+                        </div>
+                    </div>
+                </lightning:card>
+            </aura:if>
+
+            <aura:if isTrue="{! v.account.Finance_Approval_Status__c == 'Rejected'}">
+                <lightning:card title="Finance Approval" iconName="standard:approval">
+                    <div class="slds-p-around_medium">
+                        <div class="slds-notify slds-notify_alert slds-alert_error">
+                            <lightning:icon iconName="utility:error" size="x-small" class="slds-m-right_x-small"/>
+                            <h2>Rejected — {!v.account.Rejection_Reason__c}</h2>
+                        </div>
+                    </div>
+                </lightning:card>
+            </aura:if>
+        </aura:if>
+
+        <!-- Approve Modal -->
+        <aura:if isTrue="{!v.showApproveModal}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-modal__title">Approve Account</h2>
+                        <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeModals}"
+                            alternativeText="Close" variant="bare-inverse" class="slds-modal__close"/>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p class="slds-m-bottom_medium">Please enter the approved credit limit for this customer before submitting to Logo ERP.</p>
+                        <lightning:input label="Approved Limit (TRY)" type="number" value="{!v.approvedLimit}"
+                            placeholder="Enter approved limit amount" required="true" formatter="currency"/>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancel" onclick="{!c.closeModals}" variant="neutral"/>
+                        <lightning:button label="Confirm Approval" onclick="{!c.confirmApproval}" variant="success"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+
+        <!-- Reject Modal -->
+        <aura:if isTrue="{!v.showRejectModal}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-modal__title">Reject Account</h2>
+                        <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeModals}"
+                            alternativeText="Close" variant="bare-inverse" class="slds-modal__close"/>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning:textarea label="Rejection Reason" value="{!v.rejectionReason}"
+                            placeholder="Please enter the reason for rejection..." rows="4" required="true"/>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancel" onclick="{!c.closeModals}" variant="neutral"/>
+                        <lightning:button label="Confirm Rejection" onclick="{!c.confirmRejection}" variant="destructive"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

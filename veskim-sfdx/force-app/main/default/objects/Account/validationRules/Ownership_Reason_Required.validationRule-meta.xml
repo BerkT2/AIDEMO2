@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Ownership_Reason_Required</fullName>
+    <active>true</active>
+    <description>When claiming a passive/pool customer, the sales rep must provide an Ownership Reason.</description>
+    <errorConditionFormula>AND(
+  ISCHANGED(OwnerId),
+  OR(
+    ISPICKVAL(PRIORVALUE(Customer_Status__c), 'Passive'),
+    ISPICKVAL(PRIORVALUE(Customer_Status__c), 'Pool')
+  ),
+  ISBLANK(Ownership_Reason__c)
+)</errorConditionFormula>
+    <errorMessage>Please enter an Ownership Reason when claiming a Passive or Pool customer.</errorMessage>
+</ValidationRule>

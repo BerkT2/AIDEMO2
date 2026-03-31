@@ -1,0 +1,112 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <!-- Veskim Lead Tracker - Displays lead pipeline status and conversion info -->
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="lead" type="Object"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="showConvertModal" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <force:recordData aura:id="leadRecord"
+        recordId="{!v.recordId}"
+        targetFields="{!v.lead}"
+        fields="Id,Name,Company,Status,LeadSource,Industry,Veskim_Department__c,Segmentation__c,Related_Department__c,City_District__c,IsConverted,ConvertedAccountId,OwnerId"
+        recordUpdated="{!c.recordLoaded}"
+        mode="VIEW"/>
+
+    <div class="veskim-lead-tracker slds-p-around_medium">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner alternativeText="Loading" size="medium"/>
+        </aura:if>
+        <aura:if isTrue="{!!v.isLoading}">
+
+            <!-- Conversion Status -->
+            <aura:if isTrue="{!v.lead.IsConverted}">
+                <div class="slds-notify slds-notify_alert slds-alert_success slds-m-bottom_small" role="status">
+                    <lightning:icon iconName="utility:success" size="x-small" class="slds-m-right_x-small"/>
+                    <h2>This Lead has been <strong>Converted</strong> to Account, Contact and Opportunity.</h2>
+                </div>
+            </aura:if>
+
+            <!-- Lead Stage Pipeline -->
+            <lightning:card title="Lead Progress" iconName="standard:lead" class="slds-m-bottom_medium">
+                <div class="slds-p-around_medium">
+                    <div class="slds-progress">
+                        <ol class="slds-progress__list">
+                            <li class="{! 'slds-progress__item' + (v.lead.Status == 'New' ? ' slds-is-active' : ' slds-is-completed')}">
+                                <button class="slds-button slds-button_icon slds-progress__marker">
+                                    <lightning:icon iconName="utility:check" size="xx-small"/>
+                                </button>
+                                <div class="slds-progress__item-content slds-grid slds-grid_align-spread">
+                                    <span>New</span>
+                                </div>
+                            </li>
+                            <li class="{! 'slds-progress__item' + (v.lead.Status == 'Working' ? ' slds-is-active' : '')}">
+                                <button class="slds-button slds-button_icon slds-progress__marker">
+                                    <lightning:icon iconName="utility:check" size="xx-small"/>
+                                </button>
+                                <div class="slds-progress__item-content slds-grid slds-grid_align-spread">
+                                    <span>Working</span>
+                                </div>
+                            </li>
+                            <li class="{! 'slds-progress__item' + (v.lead.Status == 'Nurturing' ? ' slds-is-active' : '')}">
+                                <button class="slds-button slds-button_icon slds-progress__marker">
+                                    <lightning:icon iconName="utility:check" size="xx-small"/>
+                                </button>
+                                <div class="slds-progress__item-content slds-grid slds-grid_align-spread">
+                                    <span>Nurturing</span>
+                                </div>
+                            </li>
+                            <li class="{! 'slds-progress__item' + (v.lead.IsConverted ? ' slds-is-completed' : '')}">
+                                <button class="slds-button slds-button_icon slds-progress__marker">
+                                    <lightning:icon iconName="utility:check" size="xx-small"/>
+                                </button>
+                                <div class="slds-progress__item-content slds-grid slds-grid_align-spread">
+                                    <span>Converted</span>
+                                </div>
+                            </li>
+                        </ol>
+                        <div class="slds-progress-bar" role="progressbar">
+                            <span class="slds-progress-bar__value" style="width: 50%;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div slot="actions">
+                    <aura:if isTrue="{!!v.lead.IsConverted}">
+                        <lightning:button label="Convert Lead" iconName="utility:forward"
+                            variant="brand" onclick="{!c.convertLead}"/>
+                    </aura:if>
+                </div>
+            </lightning:card>
+
+            <!-- Key Details -->
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <div class="slds-box">
+                        <p class="slds-text-body_small slds-text-color_weak">Veskim Department</p>
+                        <lightning:badge label="{!v.lead.Veskim_Department__c}" class="slds-theme_info"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <div class="slds-box">
+                        <p class="slds-text-body_small slds-text-color_weak">Lead Source</p>
+                        <p class="slds-text-body_regular">{!v.lead.LeadSource}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <div class="slds-box">
+                        <p class="slds-text-body_small slds-text-color_weak">Segmentation</p>
+                        <p class="slds-text-body_regular">{!v.lead.Segmentation__c}</p>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                    <div class="slds-box">
+                        <p class="slds-text-body_small slds-text-color_weak">City / District</p>
+                        <p class="slds-text-body_regular">{!v.lead.City_District__c}</p>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

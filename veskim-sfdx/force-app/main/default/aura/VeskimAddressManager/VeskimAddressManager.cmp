@@ -1,0 +1,147 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <!-- Veskim Address Manager - Displays and manages customer addresses on Account pages -->
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="addresses" type="List" default="[]"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="showNewAddressModal" type="Boolean" default="false"/>
+    <aura:attribute name="newAddress" type="Object" default="{}"/>
+    <aura:attribute name="filterType" type="String" default="All"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class="veskim-address-manager slds-p-around_medium">
+        <lightning:card title="Customer Addresses" iconName="utility:location">
+            <!-- Filter Buttons -->
+            <div slot="actions">
+                <lightning:buttonGroup>
+                    <lightning:button label="All" variant="{! v.filterType == 'All' ? 'brand' : 'neutral'}"
+                        onclick="{!c.filterAll}"/>
+                    <lightning:button label="Shipping" variant="{! v.filterType == 'Shipping Address' ? 'brand' : 'neutral'}"
+                        onclick="{!c.filterShipping}"/>
+                    <lightning:button label="Billing" variant="{! v.filterType == 'Billing Address' ? 'brand' : 'neutral'}"
+                        onclick="{!c.filterBilling}"/>
+                </lightning:buttonGroup>
+                <lightning:button label="New Address" iconName="utility:add" variant="brand"
+                    onclick="{!c.openNewAddressModal}" class="slds-m-left_small"/>
+            </div>
+
+            <aura:if isTrue="{!v.isLoading}">
+                <div class="slds-p-around_medium slds-text-align_center">
+                    <lightning:spinner alternativeText="Loading addresses" size="medium"/>
+                </div>
+            </aura:if>
+
+            <aura:if isTrue="{!!v.isLoading}">
+                <aura:if isTrue="{! empty(v.addresses)}">
+                    <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-text-align_center">
+                        <lightning:icon iconName="utility:location" size="large" class="slds-text-color_weak"/>
+                        <p class="slds-text-body_regular slds-text-color_weak slds-m-top_small">No addresses found. Add the first address.</p>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{! !empty(v.addresses)}">
+                    <div class="slds-p-horizontal_small">
+                        <aura:iteration items="{!v.addresses}" var="addr">
+                            <div class="slds-media slds-p-around_small slds-border_bottom veskim-address-item">
+                                <div class="slds-media__figure">
+                                    <lightning:icon
+                                        iconName="{! addr.Address_Type__c == 'Shipping Address' ? 'utility:truck' : 'utility:file'}"
+                                        size="small"
+                                        class="{! addr.Address_Type__c == 'Shipping Address' ? 'slds-icon-text-default' : 'slds-icon-text-default'}"/>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-grid slds-grid_align-spread">
+                                        <div>
+                                            <p class="slds-text-heading_small">{!addr.Name}</p>
+                                            <p class="slds-text-body_small">
+                                                {!addr.Address_Line_1__c}
+                                                <aura:if isTrue="{!addr.Address_Line_2__c}">
+                                                    , {!addr.Address_Line_2__c}
+                                                </aura:if>
+                                            </p>
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                {!addr.Neighborhood__c} {!addr.District__c} / {!addr.City__c} - {!addr.Postal_Code__c}
+                                            </p>
+                                            <aura:if isTrue="{!addr.Contact_Name__c}">
+                                                <p class="slds-text-body_small">
+                                                    <lightning:icon iconName="utility:contact" size="xx-small" class="slds-m-right_xx-small"/>
+                                                    {!addr.Contact_Name__c}
+                                                    <aura:if isTrue="{!addr.Address_Phone__c}">
+                                                        · {!addr.Address_Phone__c}
+                                                    </aura:if>
+                                                </p>
+                                            </aura:if>
+                                        </div>
+                                        <div class="slds-no-flex">
+                                            <lightning:badge label="{!addr.Address_Type__c}"
+                                                class="{! addr.Address_Type__c == 'Shipping Address' ? 'slds-theme_info' : 'slds-theme_shade'}"/>
+                                            <aura:if isTrue="{!!addr.Is_Active__c}">
+                                                <lightning:badge label="Inactive" class="slds-m-left_xx-small slds-theme_error"/>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </aura:if>
+            </aura:if>
+        </lightning:card>
+
+        <!-- New Address Modal -->
+        <aura:if isTrue="{!v.showNewAddressModal}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-modal__title slds-hyphenate">New Address</h2>
+                        <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeModal}"
+                            alternativeText="Close" variant="bare-inverse" class="slds-modal__close"/>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:input label="Address Definition" value="{!v.newAddress.Name}"
+                                    placeholder="e.g. Gebze Depot, Head Office" required="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning:select label="Address Type" value="{!v.newAddress.Address_Type__c}" required="true">
+                                    <option value="">-- Select --</option>
+                                    <option value="Shipping Address">Shipping Address</option>
+                                    <option value="Billing Address">Billing Address</option>
+                                </lightning:select>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                                <lightning:input label="Address Line 1" value="{!v.newAddress.Address_Line_1__c}" required="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                                <lightning:input label="Address Line 2" value="{!v.newAddress.Address_Line_2__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 slds-m-top_small">
+                                <lightning:input label="City" value="{!v.newAddress.City__c}" required="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 slds-m-top_small">
+                                <lightning:input label="District" value="{!v.newAddress.District__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 slds-m-top_small">
+                                <lightning:input label="Postal Code" value="{!v.newAddress.Postal_Code__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 slds-m-top_small">
+                                <lightning:input label="Contact Name" value="{!v.newAddress.Contact_Name__c}"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 slds-m-top_small">
+                                <lightning:input label="Address Phone" value="{!v.newAddress.Address_Phone__c}" type="tel"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 slds-m-top_small">
+                                <lightning:input label="Address Email" value="{!v.newAddress.Address_Email__c}" type="email"/>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancel" onclick="{!c.closeModal}" variant="neutral"/>
+                        <lightning:button label="Save Address" onclick="{!c.saveAddress}" variant="brand"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

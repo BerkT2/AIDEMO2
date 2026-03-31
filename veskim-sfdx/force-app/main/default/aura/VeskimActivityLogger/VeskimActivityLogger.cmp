@@ -1,0 +1,118 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <!-- Veskim Activity Logger - Quick activity logging for field sales team -->
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="showLogModal" type="Boolean" default="false"/>
+    <aura:attribute name="activityType" type="String" default="Field Visit"/>
+    <aura:attribute name="subject" type="String" default=""/>
+    <aura:attribute name="description" type="String" default=""/>
+    <aura:attribute name="activityDate" type="String"/>
+    <aura:attribute name="recentActivities" type="List" default="[]"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class="veskim-activity-logger slds-p-around_medium">
+        <lightning:card title="Activity Log" iconName="standard:event">
+            <div slot="actions">
+                <lightning:button label="Log Activity" iconName="utility:add"
+                    variant="brand" onclick="{!c.openLogModal}"/>
+            </div>
+
+            <aura:if isTrue="{!v.isLoading}">
+                <div class="slds-p-around_medium slds-text-align_center">
+                    <lightning:spinner alternativeText="Loading" size="small"/>
+                </div>
+            </aura:if>
+
+            <aura:if isTrue="{!!v.isLoading}">
+                <!-- Quick Stats Row -->
+                <div class="slds-grid slds-gutters slds-p-horizontal_small slds-m-bottom_small">
+                    <div class="slds-col slds-size_1-of-3 slds-text-align_center">
+                        <lightning:icon iconName="utility:location" size="small" class="slds-m-right_xx-small"/>
+                        <span class="slds-text-body_small">Field Visits</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-text-align_center">
+                        <lightning:icon iconName="utility:call" size="small" class="slds-m-right_xx-small"/>
+                        <span class="slds-text-body_small">Phone Calls</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-text-align_center">
+                        <lightning:icon iconName="utility:email" size="small" class="slds-m-right_xx-small"/>
+                        <span class="slds-text-body_small">Emails</span>
+                    </div>
+                </div>
+
+                <!-- Recent Activities List -->
+                <div class="slds-p-horizontal_small">
+                    <aura:if isTrue="{! empty(v.recentActivities)}">
+                        <p class="slds-text-body_small slds-text-color_weak slds-p-around_small">No activities yet. Log the first activity.</p>
+                    </aura:if>
+                    <aura:iteration items="{!v.recentActivities}" var="act">
+                        <div class="slds-media slds-media_center slds-p-vertical_x-small slds-border_bottom">
+                            <div class="slds-media__figure">
+                                <lightning:icon
+                                    iconName="{! act.Type == 'Field Visit' ? 'utility:location' :
+                                               (act.Type == 'Phone Call' ? 'utility:call' :
+                                               (act.Type == 'Online Meeting' ? 'utility:video' : 'utility:email'))}"
+                                    size="small"/>
+                            </div>
+                            <div class="slds-media__body">
+                                <p class="slds-text-body_regular">{!act.Subject}</p>
+                                <p class="slds-text-body_small slds-text-color_weak">
+                                    <lightning:formattedDateTime value="{!act.ActivityDate}" year="numeric" month="short" day="2-digit"/>
+                                    · {!act.Type}
+                                </p>
+                            </div>
+                            <div class="slds-no-flex">
+                                <lightning:badge label="{!act.Status}"
+                                    class="{! act.Status == 'Completed' ? 'slds-theme_success' :
+                                           (act.Status == 'Cancelled' ? 'slds-theme_error' : 'slds-theme_shade')}"/>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </div>
+            </aura:if>
+        </lightning:card>
+
+        <!-- Log Activity Modal -->
+        <aura:if isTrue="{!v.showLogModal}">
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-modal__title">Log Activity</h2>
+                        <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeModal}"
+                            alternativeText="Close" variant="bare-inverse" class="slds-modal__close"/>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <lightning:select label="Activity Type" value="{!v.activityType}" required="true">
+                                    <option value="Field Visit">Field Visit</option>
+                                    <option value="Online Meeting">Online Meeting</option>
+                                    <option value="Phone Call">Phone Call</option>
+                                    <option value="Email">Email</option>
+                                </lightning:select>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <lightning:input label="Date" type="date" value="{!v.activityDate}" required="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-m-bottom_small">
+                                <lightning:input label="Subject" value="{!v.subject}"
+                                    placeholder="e.g. Sample Follow-up Visit" required="true"/>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning:textarea label="Visit Notes / Description" value="{!v.description}"
+                                    placeholder="Enter details about topics discussed, customer requests, and action items..."
+                                    rows="5"/>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancel" onclick="{!c.closeModal}" variant="neutral"/>
+                        <lightning:button label="Save Activity" onclick="{!c.saveActivity}" variant="brand"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+</aura:component>

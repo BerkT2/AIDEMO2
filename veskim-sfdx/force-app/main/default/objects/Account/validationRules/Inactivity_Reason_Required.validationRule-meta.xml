@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inactivity_Reason_Required</fullName>
+    <active>true</active>
+    <description>When Customer Status is set to Passive or Pool, the Inactivity Reason field must be filled in.</description>
+    <errorConditionFormula>AND(
+  OR(
+    ISPICKVAL(Customer_Status__c, 'Passive'),
+    ISPICKVAL(Customer_Status__c, 'Pool')
+  ),
+  ISBLANK(Inactivity_Reason__c)
+)</errorConditionFormula>
+    <errorMessage>Please enter an Inactivity Reason when setting Customer Status to Passive or Pool.</errorMessage>
+</ValidationRule>

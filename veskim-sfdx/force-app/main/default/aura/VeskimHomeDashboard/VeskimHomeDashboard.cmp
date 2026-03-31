@@ -1,0 +1,127 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
+    <!-- Veskim Home Dashboard Component -->
+    <aura:attribute name="leadCount" type="Integer" default="0"/>
+    <aura:attribute name="activeAccountCount" type="Integer" default="0"/>
+    <aura:attribute name="pendingApprovalCount" type="Integer" default="0"/>
+    <aura:attribute name="openOpportunityCount" type="Integer" default="0"/>
+    <aura:attribute name="recentLeads" type="List"/>
+    <aura:attribute name="recentActivities" type="List"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class="veskim-home-dashboard slds-p-around_medium">
+        <!-- Header -->
+        <div class="slds-page-header slds-page-header_record-home slds-m-bottom_medium">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-right_small">
+                            <lightning:icon iconName="standard:home" size="large"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1 class="slds-page-header__title slds-p-right_x-small">Veskim CRM Dashboard</h1>
+                            <p class="slds-text-body_small">Sales &amp; Customer Management Overview</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards Row -->
+        <div class="slds-grid slds-gutters slds-m-bottom_medium">
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-card veskim-kpi-card veskim-kpi-leads">
+                    <div class="slds-card__body slds-card__body_inner slds-text-align_center slds-p-around_medium">
+                        <lightning:icon iconName="standard:lead" size="medium" class="slds-m-bottom_x-small"/>
+                        <p class="slds-text-heading_large">{!v.leadCount}</p>
+                        <p class="slds-text-body_regular slds-text-color_weak">Active Leads</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-card veskim-kpi-card veskim-kpi-accounts">
+                    <div class="slds-card__body slds-card__body_inner slds-text-align_center slds-p-around_medium">
+                        <lightning:icon iconName="standard:account" size="medium" class="slds-m-bottom_x-small"/>
+                        <p class="slds-text-heading_large">{!v.activeAccountCount}</p>
+                        <p class="slds-text-body_regular slds-text-color_weak">Active Accounts</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-card veskim-kpi-card veskim-kpi-pending">
+                    <div class="slds-card__body slds-card__body_inner slds-text-align_center slds-p-around_medium">
+                        <lightning:icon iconName="standard:approval" size="medium" class="slds-m-bottom_x-small"/>
+                        <p class="slds-text-heading_large">{!v.pendingApprovalCount}</p>
+                        <p class="slds-text-body_regular slds-text-color_weak">Pending Finance Approval</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-4">
+                <div class="slds-card veskim-kpi-card veskim-kpi-opportunities">
+                    <div class="slds-card__body slds-card__body_inner slds-text-align_center slds-p-around_medium">
+                        <lightning:icon iconName="standard:opportunity" size="medium" class="slds-m-bottom_x-small"/>
+                        <p class="slds-text-heading_large">{!v.openOpportunityCount}</p>
+                        <p class="slds-text-body_regular slds-text-color_weak">Open Opportunities</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Leads and Activities -->
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:card title="Recent Leads" iconName="standard:lead">
+                    <aura:if isTrue="{!v.isLoading}">
+                        <lightning:spinner alternativeText="Loading" size="small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!!v.isLoading}">
+                        <div class="slds-p-horizontal_small">
+                            <aura:iteration items="{!v.recentLeads}" var="lead">
+                                <div class="slds-media slds-media_center slds-p-vertical_x-small slds-border_bottom">
+                                    <div class="slds-media__body">
+                                        <a onclick="{!c.navigateToLead}" data-id="{!lead.Id}" class="slds-text-link">
+                                            {!lead.Name}
+                                        </a>
+                                        <p class="slds-text-body_small slds-text-color_weak">{!lead.Company} · {!lead.Status}</p>
+                                    </div>
+                                    <div class="slds-media__figure slds-media__figure_reverse">
+                                        <lightning:badge label="{!lead.Veskim_Department__c}" class="slds-theme_shade"/>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                    </aura:if>
+                    <div slot="footer">
+                        <lightning:button label="View All Leads" onclick="{!c.navigateToLeadList}" variant="base"/>
+                    </div>
+                </lightning:card>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:card title="Recent Activities" iconName="standard:event">
+                    <aura:if isTrue="{!v.isLoading}">
+                        <lightning:spinner alternativeText="Loading" size="small"/>
+                    </aura:if>
+                    <aura:if isTrue="{!!v.isLoading}">
+                        <div class="slds-p-horizontal_small">
+                            <aura:iteration items="{!v.recentActivities}" var="activity">
+                                <div class="slds-media slds-media_center slds-p-vertical_x-small slds-border_bottom">
+                                    <div class="slds-media__figure">
+                                        <lightning:icon iconName="standard:event" size="small"/>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="slds-text-body_regular">{!activity.Subject}</p>
+                                        <p class="slds-text-body_small slds-text-color_weak">{!activity.ActivityDate} · {!activity.Type}</p>
+                                    </div>
+                                </div>
+                            </aura:iteration>
+                        </div>
+                    </aura:if>
+                    <div slot="footer">
+                        <lightning:button label="View All Activities" onclick="{!c.navigateToActivityList}" variant="base"/>
+                    </div>
+                </lightning:card>
+            </div>
+        </div>
+    </div>
+</aura:component>

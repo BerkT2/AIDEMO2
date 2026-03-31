@@ -1,0 +1,31 @@
+.THIS.veskim-home-dashboard {
+    background-color: #f3f2f2;
+    min-height: 100vh;
+}
+
+.THIS .veskim-kpi-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.THIS .veskim-kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.THIS .veskim-kpi-leads {
+    border-top: 4px solid #0176d3;
+}
+
+.THIS .veskim-kpi-accounts {
+    border-top: 4px solid #04844b;
+}
+
+.THIS .veskim-kpi-pending {
+    border-top: 4px solid #fe9339;
+}
+
+.THIS .veskim-kpi-opportunities {
+    border-top: 4px solid #9050e9;
+}

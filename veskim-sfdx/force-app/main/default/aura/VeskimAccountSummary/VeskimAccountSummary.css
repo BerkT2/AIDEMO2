@@ -1,0 +1,12 @@
+.THIS .veskim-metric-box {
+    background-color: #f8f8f8;
+    border-radius: 6px;
+    padding: 12px;
+    height: 100%;
+}
+
+.THIS .veskim-erp-info {
+    background-color: #e8f4fd;
+    border-left: 4px solid #0176d3;
+    border-radius: 4px;
+}
